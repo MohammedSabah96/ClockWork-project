@@ -54,13 +54,30 @@ function updateValue(key, value) {
 function startButton() {
   buttonsManager(["start", false], ["stop", true], ["pause", true]);
   freezeInputs();
+  timerObj.timeId = setInterval(function() {
+    timerObj.seconds--;
+    if (timerObj.seconds < 0) {
+      if (timerObj.minutes == 0) {
+        soundAlarm();
+        return stopButton();
+      }
+      timerObj.seconds = 59;
+      timerObj.minutes--;
+    }
+    updateValue("minutes", timerObj.minutes);
+    updateValue("seconds", timerObj.seconds);
+  }, 1000);
 }
 function stopButton() {
   buttonsManager(["start", true], ["stop", false], ["pause", false]);
   unfreezeInputs();
+  clearInterval(timerObj.timeId);
+  updateValue("minutes", $("#minutes-input").val());
+  updateValue("seconds", $("#seconds-input").val());
 }
 function pauseButton() {
   buttonsManager(["start", true], ["stop", true], ["pause", false]);
+  clearInterval(timerObj.timeId);
 }
 
 function buttonsManager(...buttonsArray) {
