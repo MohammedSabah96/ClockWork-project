@@ -73,7 +73,11 @@ function stopButton() {
   unfreezeInputs();
   clearInterval(timerObj.timeId);
   updateValue("minutes", $("#minutes-input").val());
-  updateValue("seconds", $("#seconds-input").val());
+  let seconds = $("#seconds-input").val();
+  if (seconds < 10) {
+    seconds = "0" + seconds;
+  }
+  updateValue("seconds", seconds);
 }
 function pauseButton() {
   buttonsManager(["start", true], ["stop", true], ["pause", false]);
